@@ -1,30 +1,38 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
 module.exports = {
-    entry: "./src/index.tsx",
+    mode: "development",
+    entry: path.join(__dirname, "./src/index"),
     output: {
         filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: path.resolve(__dirname, "./dist")
     },
-
     // Enable sourcemaps for debugging webpack's output.
-    devtool: "inline-source-map",
-    devServer:"./dist",
+    devtool: "source-map",
+    devServer: {
+        // contentBase: path.resolve(__dirname, 'dist'),
+        compress: true,
+        port: 1204,
+        host: "192.168.168.235",
+        open: true
+    },
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: [".ts", ".tsx", ".js", ".json"]
     },
-    plugins:[
+    plugins: [
         new HtmlWebpackPlugin({
             title: 'Development',
+            template: './index.html'
         }),
     ],
     module: {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+            {test: /\.tsx?$/, loader: "awesome-typescript-loader"},
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+            {enforce: "pre", test: /\.js$/, loader: "source-map-loader"}
         ]
     },
 
@@ -32,8 +40,8 @@ module.exports = {
     // assume a corresponding global variable exists and use that instead.
     // This is important because it allows us to avoid bundling all of our
     // dependencies, which allows browsers to cache those libraries between builds.
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
-    },
+    // externals: {
+    //     "react": "React",
+    //     "react-dom": "ReactDOM"
+    // },
 };
